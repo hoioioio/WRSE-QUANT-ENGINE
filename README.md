@@ -94,7 +94,7 @@ Interpretation note:
 | **Sharpe Ratio**       |           **0.65**          |               0.59               |
 | **Trading Days**       |          1,457 Days         |            1,457 Days            |
 
-!\[Strategy Equity vs Bitcoin Benchmark]\(docs/assets\_public/equity\_vs\_btc\_log.png null)
+![Strategy Equity vs Bitcoin Benchmark](docs/assets_public/equity_vs_btc_log.png)
 
 ### 7.2 Yearly OOS Splits (Train → Test)
 
@@ -107,7 +107,7 @@ Interpretation note:
 
 > 🔍 **Regime Analysis**: In the 2022 deleveraging cycle, entries were aggressively suppressed under funding/volatility chaos, stalling growth while containing drawdowns. In the directional trends of 2023, the trend component dominated and drove most of the upside.
 
-!\[WFO OOS Sharpe]\(docs/assets\_public/wfo\_oos\_sharpe.png null)
+![WFO OOS Sharpe](docs/assets_public/wfo_oos_sharpe.png)
 
 ## 8. Engine Architecture 🧩
 
