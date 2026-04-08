@@ -4,6 +4,7 @@
 
 ```bash
 pip install -r requirements.txt
+python scripts/fetch_data.py --config config/strategy_params.example.toml --start 2020-01-01 --end 2024-12-31
 python cli.py wfo --config config/strategy_params.example.toml --write_csv ./outputs_tmp
 python report.py --config config/strategy_params.example.toml --public
 ```
@@ -15,6 +16,33 @@ python report.py --config config/strategy_params.example.toml --public
 Note:
 - Raw market data is not included in this repository (size/licensing constraints). WRSE is designed to read cached OHLCV/funding/L2 summaries via the schema below.
 - `report.py --public` exports normalized equity (`docs/assets_public/*.json`) used by the GitHub Pages dashboard.
+
+## Build Cache (OHLCV / Funding)
+
+WRSE expects cached inputs under `{backtest_cache_dir}` and `{regime_cache_dir}`. You can build them using the included script:
+
+```bash
+python scripts/fetch_data.py --config config/strategy_params.example.toml --start 2020-01-01 --end 2024-12-31
+```
+
+Options:
+- `--symbols BTC_USDT,ETH_USDT` to override symbols
+- `--timeframe 15m` to override timeframe
+- `--backtest_cache_dir <path>` / `--regime_cache_dir <path>` to override output locations
+- `--no_funding` to skip funding download
+
+Notes:
+- This script uses Binance Futures public endpoints (no API key). Access may vary by region/network policy.
+- L2 summary cache is not produced by this script. If missing, the engine falls back to OHLC-based estimation.
+
+## Smoke Run (fast)
+
+If you only want to verify that the pipeline runs end-to-end, use the smoke config:
+
+```bash
+python scripts/fetch_data.py --config config/strategy_params.smoke.toml --start 2024-01-01 --end 2024-01-02
+python cli.py wfo --config config/strategy_params.smoke.toml
+```
 
 ## Data Inputs
 

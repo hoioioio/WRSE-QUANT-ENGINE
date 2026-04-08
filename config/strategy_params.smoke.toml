@@ -1,0 +1,36 @@
+[data]
+backtest_cache_dir = "c:/backtest_cache"
+regime_cache_dir = "c:/alpha_cache"
+timeframe = "15m"
+symbols = ["BTC_USDT"]
+
+[execution]
+slippage_bps = 2.0
+taker_fee_rate = 0.0004
+maker_fee_rate = 0.0002
+exec_mode = "maker_then_taker"
+
+[walk_forward]
+years = [2024]
+weights_grid = [0.5]
+v2_param_samples = 2
+
+[shock_model]
+horizon_bars = 6
+label_threshold = 0.08
+neg_ratio = 2.0
+ridge_l2 = 5.0
+
+[risk]
+portfolio_slots = 1
+risk_per_trade = 0.0125
+stop_loss_pct_trend = 0.02
+stop_loss_pct_shock = 0.03
+enable_vol_targeting = false
+vol_ratio_floor = 0.8
+vol_ratio_cap = 2.0
+vol_ratio_power = 1.0
+dd_threshold_1 = 0.05
+dd_threshold_2 = 0.10
+dd_scale_1 = 0.7
+dd_scale_2 = 0.4
