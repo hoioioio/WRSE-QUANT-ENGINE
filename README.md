@@ -11,6 +11,19 @@ Notes:
 - Raw market data is not included (size/licensing). WRSE reads cached OHLCV (required) and optionally funding/L2 summaries.
 - Python 3.11+ required (`tomllib`).
 
+## Key Features
+
+- Walk-forward evaluation with OOS-only accumulation (split-by-year)
+- Execution-aware simulation (maker/taker fees, slippage, funding, maker→taker fallback)
+- Reproducible public artifacts (dashboard JSON + figures under `docs/assets_public/`)
+- Config-driven research workflow (TOML)
+
+## Failure Cases (Typical)
+
+- Sideways / range-bound regimes
+- Low volatility regimes
+- Sudden liquidity shocks (execution quality degradation)
+
 ## Performance Snapshot (WFO OOS; 2021–2024)
 
 All metrics are accumulated through walk-forward out-of-sample (OOS) splits. `AB Hybrid` applies an execution model (maker→taker fallback + fees/slippage/funding). `Taker-only` is a harsher stress mode.
