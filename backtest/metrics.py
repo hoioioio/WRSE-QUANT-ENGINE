@@ -94,7 +94,10 @@ def link_equity(eq: pd.DataFrame, last_cap: float, *, base_cap: float = 100000.0
     if eq is None or eq.empty:
         return eq, float(last_cap)
     out = eq.copy()
-    out["capital"] = out["capital"] - float(base_cap) + float(last_cap)
+    shift = float(last_cap) - float(base_cap)
+    out["capital"] = out["capital"] + shift
+    if "equity" in out.columns:
+        out["equity"] = out["equity"] + shift
     last = float(out["capital"].iloc[-1])
     return out, last
 
@@ -102,14 +105,22 @@ def link_equity(eq: pd.DataFrame, last_cap: float, *, base_cap: float = 100000.0
 def combine_equity(eq_a: pd.DataFrame, eq_b: pd.DataFrame, w_a: float) -> pd.DataFrame:
     if eq_a is None or eq_a.empty or eq_b is None or eq_b.empty:
         return pd.DataFrame()
-    s1 = eq_a.set_index("time")["capital"]
-    s2 = eq_b.set_index("time")["capital"]
+    a = eq_a.set_index("time").sort_index()
+    b = eq_b.set_index("time").sort_index()
+    s1 = a["capital"]
+    s2 = b["capital"]
     idx = s1.index.union(s2.index).sort_values()
     s1 = s1.reindex(idx).ffill().bfill()
     s2 = s2.reindex(idx).ffill().bfill()
     combo = (s1 * float(w_a)) + (s2 * (1.0 - float(w_a)))
     out = combo.reset_index()
     out.columns = ["time", "capital"]
+
+    if "equity" in a.columns and "equity" in b.columns:
+        e1 = a["equity"].reindex(idx).ffill().bfill()
+        e2 = b["equity"].reindex(idx).ffill().bfill()
+        out["equity"] = ((e1 * float(w_a)) + (e2 * (1.0 - float(w_a)))).to_numpy()
+
     return out
 
 

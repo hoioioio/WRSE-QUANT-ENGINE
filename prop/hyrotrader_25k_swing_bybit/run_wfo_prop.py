@@ -1,8 +1,8 @@
 import argparse
 from pathlib import Path
 
-from wrse.backtest.walkforward import run_wfo_fast
-from wrse.utils.config import Config
+from backtest.walkforward import run_wfo_fast
+from utils.config import Config
 
 
 def main() -> int:

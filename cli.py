@@ -1,15 +1,9 @@
 import argparse
-import sys
-from pathlib import Path
 
 import numpy as np
 
-_PARENT = Path(__file__).resolve().parent.parent
-if str(_PARENT) not in sys.path:
-    sys.path.insert(0, str(_PARENT))
-
-from wrse.utils.config import Config
-from wrse.backtest.walkforward import run_wfo_fast
+from utils.config import Config
+from backtest.walkforward import run_wfo_fast
 
 
 def _fmt_pct(x):
@@ -73,9 +67,9 @@ def cmd_wfo(args) -> int:
 def cmd_compare(args) -> int:
     cfg = Config.load(args.config).raw
     try:
-        from wrse.backtest.compare import run_compare
+        from backtest.compare import run_compare
     except Exception:
-        print("COMPARE_UNAVAILABLE: wrse.backtest.compare is not available in this repository snapshot.")
+        print("COMPARE_UNAVAILABLE: backtest.compare is not available in this repository snapshot.")
         return 2
     res = run_compare(cfg, leverage_mult_off=float(args.leverage_off), leverage_mult_on=float(args.leverage_on))
     tbl = res.get("table")

@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from wrse.utils.config import Config
+from utils.config import Config
 
 
 def _to_dt(s: pd.Series) -> pd.Series:

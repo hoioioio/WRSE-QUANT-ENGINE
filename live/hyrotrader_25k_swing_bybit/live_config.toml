@@ -1,0 +1,23 @@
+[bybit]
+category = "linear"
+
+[universe]
+symbols = ["BTC/USDT:USDT", "ETH/USDT:USDT"]
+signal_timeframe = "4h"
+entry_timeframe = "15m"
+ohlcv_limit = 1500
+
+[risk]
+initial_capital = 25000.0
+daily_dd_pct = 0.05
+max_loss_pct = 0.10
+max_risk_per_position_pct = 0.03
+internal_daily_stop_pct = 0.025
+risk_per_trade_pct = 0.0075
+notional_cap = 3000.0
+leverage = 1
+stop_loss_pct_trend = 0.02
+
+[engine]
+loop_sleep_sec = 10
+bar_close_buffer_sec = 30

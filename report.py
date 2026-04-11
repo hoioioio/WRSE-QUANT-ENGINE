@@ -1,6 +1,5 @@
 import argparse
 import json
-import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -8,13 +7,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-_PARENT = Path(__file__).resolve().parent.parent
-if str(_PARENT) not in sys.path:
-    sys.path.insert(0, str(_PARENT))
-
-from wrse.utils.config import Config
-from wrse.backtest.walkforward import run_wfo_fast
-from wrse.data.loader import DataSpec, load_universe
+from utils.config import Config
+from backtest.walkforward import run_wfo_fast
+from data.loader import DataSpec, load_universe
 
 
 @dataclass(frozen=True)

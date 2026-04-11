@@ -32,6 +32,8 @@ c:/alpha_cache/
 .venv/
 local*.toml
 outputs/
+outputs_*/
+live/**/_state/
 _tmp_cache/
 _tmp_out/
 _tmp_*/

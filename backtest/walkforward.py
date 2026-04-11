@@ -3,10 +3,10 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from wrse.alpha.shock import build_train_matrix, fit_ridge_signed_classifier, build_feature_frame, predict_score
-from wrse.backtest.metrics import calc_equity_metrics, combine_equity, link_equity, year_table
-from wrse.backtest.simulators import simulate_v2xa, simulate_shockscore
-from wrse.data.loader import DataSpec, load_universe
+from alpha.shock import build_train_matrix, fit_ridge_signed_classifier, build_feature_frame, predict_score
+from backtest.metrics import calc_equity_metrics, combine_equity, link_equity, year_table
+from backtest.simulators import simulate_v2xa, simulate_shockscore
+from data.loader import DataSpec, load_universe
 
 
 def _score_for_search(trades: pd.DataFrame, equity: pd.DataFrame) -> float | None:
@@ -53,8 +53,8 @@ def _simulate_v2xa_years(
     dd_threshold_2: float,
     dd_scale_1: float,
     dd_scale_2: float,
-    initial_capital: float,
-    record_equity_every_bar: bool,
+    initial_capital: float = 100000.0,
+    record_equity_every_bar: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     trades_all = []
     eq_all = []
@@ -122,8 +122,8 @@ def _simulate_shock_years(
     dd_threshold_2: float,
     dd_scale_1: float,
     dd_scale_2: float,
-    initial_capital: float,
-    record_equity_every_bar: bool,
+    initial_capital: float = 100000.0,
+    record_equity_every_bar: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     trades_all = []
     eq_all = []

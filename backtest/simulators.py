@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from wrse.execution.models import exec_price, fee_cost, funding_pnl_per_bar, apply_slip
+from execution.models import exec_price, fee_cost, funding_pnl_per_bar, apply_slip
 
 
 def _risk_scale_from_state(
