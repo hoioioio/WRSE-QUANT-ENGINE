@@ -226,6 +226,7 @@ def _set_sl_bybit_v5(ex, *, cfg: LiveCfg, sym: str, sl_px: float) -> None:
             "category": str(cfg.category),
             "symbol": _market_id(ex, sym),
             "stopLoss": str(float(sl_px)),
+            "positionIdx": 0,
         }
     )
 
@@ -271,8 +272,38 @@ def main() -> int:
         day_key = now.floor("D").strftime("%Y-%m-%d")
         daily_path = _state_path("daily.json")
         daily = _read_json(daily_path)
+
+        def _fetch_equity_usdt() -> float:
+            bal = ex.fetch_balance()
+            if isinstance(bal, dict):
+                usdt = bal.get("USDT")
+                if isinstance(usdt, dict):
+                    for k in ["total", "equity", "free"]:
+                        v = usdt.get(k)
+                        if v is not None and np.isfinite(float(v)):
+                            return float(v)
+                total = bal.get("total")
+                if isinstance(total, dict) and "USDT" in total and np.isfinite(float(total["USDT"])):
+                    return float(total["USDT"])
+            return float(cfg.initial_capital)
+
+        cur_equity = _fetch_equity_usdt() if live_mode else float(daily.get("min_equity", cfg.initial_capital) or cfg.initial_capital)
+
         if daily.get("day") != day_key:
-            daily = {"day": day_key, "start_equity": float(cfg.initial_capital), "min_equity": float(cfg.initial_capital), "disabled": False}
+            daily = {"day": day_key, "start_equity": float(cur_equity), "min_equity": float(cur_equity), "disabled": False}
+        else:
+            daily["min_equity"] = float(min(float(daily.get("min_equity", cur_equity)), float(cur_equity)))
+
+        max_loss_floor = float(cfg.initial_capital) * (1.0 - float(cfg.max_loss_pct))
+        if float(cur_equity) <= float(max_loss_floor):
+            daily["disabled"] = True
+            _write_json(daily_path, daily)
+            raise SystemExit("MAX_LOSS_FLOOR_BREACHED")
+
+        internal_floor = float(daily["start_equity"]) - float(cfg.initial_capital) * float(cfg.internal_daily_stop_pct)
+        if float(cur_equity) <= float(internal_floor):
+            daily["disabled"] = True
+
         if bool(daily.get("disabled", False)):
             _write_json(daily_path, daily)
             time.sleep(int(cfg.loop_sleep_sec))
@@ -295,6 +326,7 @@ def main() -> int:
                     positions[sym] = {"side": str(sig), "qty": float(qty), "entry_px": float(px), "sl_px": float(sl), "ts": str(now)}
                     continue
 
+                ex.set_margin_mode("isolated", sym)
                 ex.set_leverage(int(cfg.leverage), sym)
                 ex.set_position_mode(hedged=False, symbol=sym)
                 order = ex.create_market_order(sym, str(sig), float(qty))
@@ -323,4 +355,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
